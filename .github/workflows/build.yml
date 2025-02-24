@@ -1,0 +1,121 @@
+name: Build and Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+  packages: write
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    
+    strategy:
+      matrix:
+        os: [windows-latest, macos-latest, ubuntu-latest]
+        arch: [x64, arm64]
+        exclude:
+          - os: windows-latest
+            arch: arm64
+          - os: ubuntu-latest
+            arch: arm64
+        node-version: [18.x]
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          architecture: ${{ matrix.arch }}
+          cache: 'npm'
+          
+      - name: Get version from tag
+        id: get_version
+        run: echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+        shell: bash
+
+      # Clean install dependencies
+      - name: Install Dependencies
+        run: npm ci
+        
+      # Build the application
+      - name: Build Application
+        run: npm run build
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ARCH: ${{ matrix.arch }}
+          # macOS signing and notarization
+          CSC_LINK: ${{ secrets.MAC_CERTIFICATE }}
+          CSC_KEY_PASSWORD: ${{ secrets.MAC_CERTIFICATE_PASSWORD }}
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+          
+      # List dist directory contents
+      - name: List dist directory
+        shell: bash
+        run: |
+          echo "Dist directory contents:"
+          ls -la dist/
+        
+      # Rename and organize artifacts
+      - name: Process Artifacts
+        shell: bash
+        run: |
+          mkdir -p ./artifacts
+          if [ "${{ matrix.os }}" = "windows-latest" ]; then
+            mv "dist/Sticky Notes Setup"*.exe "./artifacts/sticky_notes_${{ env.VERSION }}_win_setup.exe" || true
+          elif [ "${{ matrix.os }}" = "macos-latest" ]; then
+            if [ "${{ matrix.arch }}" = "arm64" ]; then
+              find dist -name "*-arm64.dmg" -exec cp {} "./artifacts/sticky_notes_${{ env.VERSION }}_mac_arm64.dmg" \;
+            else
+              find dist -name "*.dmg" -not -name "*-arm64.dmg" -exec cp {} "./artifacts/sticky_notes_${{ env.VERSION }}_mac.dmg" \;
+            fi
+          else
+            mv "dist/Sticky Notes"*.AppImage "./artifacts/sticky_notes_${{ env.VERSION }}_linux.AppImage" || true
+          fi
+          
+          # 显示artifacts目录内容以验证
+          echo "Artifacts directory contents:"
+          ls -la ./artifacts/
+        
+      # Upload build artifacts
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ runner.os }}-${{ matrix.arch }}
+          path: artifacts/*
+          retention-days: 1
+          
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    
+    steps:
+      - name: Download Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+          
+      - name: List Files
+        run: ls -R
+        working-directory: artifacts
+        
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: Sticky Notes ${{ github.ref_name }}
+          files: artifacts/**/*
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
