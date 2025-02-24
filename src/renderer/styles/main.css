@@ -1,0 +1,21 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--el-font-family);
+  background: transparent;
+  overflow: hidden;
+}
+
+#app {
+  height: 100vh;
+}
+
+/* Element Plus 自定義主題 */
+:root {
+  --el-color-primary: #409eff;
+  --el-border-radius-base: 4px;
+} 

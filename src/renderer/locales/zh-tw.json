@@ -1,0 +1,109 @@
+{   
+  "app": {
+        "appName": "便利貼",
+        "appVersion": "1.0.0"
+   },
+  "titleBar": {
+    "title": "便利貼",
+    "pin": "釘選到最上層",
+    "minimize": "最小化",
+    "close": "關閉",
+    "settings": "設定",
+    "noteList": "筆記列表",
+    "translate": "翻譯"
+  },
+  "confirm": {
+    "close": {
+      "title": "確認操作",
+      "message": "你想要關閉還是最小化到托盤？",
+      "minimize": "最小化到托盤",
+      "exit": "退出程序"
+    }
+  },
+  "note": {
+    "placeholder": "在這裡寫下你的筆記...",
+    "untitled": "未命名筆記"
+  },
+  "tray": {
+    "show": "顯示",
+    "exit": "退出"
+  },
+  "noteList": {
+    "title": "筆記列表",
+    "new": "新建筆記",
+    "deleteConfirm": "確定要刪除這個筆記嗎？",
+    "editTitle": "編輯標題"
+  },
+  "contextMenu": {
+    "moveUp": "向上移動",
+    "moveDown": "向下移動",
+    "star": "加入收藏",
+    "unstar": "取消收藏",
+    "rename": "重新命名",
+    "color": "更改顏色",
+    "delete": "刪除",
+    "copy": "複製",
+    "cut": "剪下",
+    "paste": "貼上"
+  },
+  "notification": {
+    "success": "成功",
+    "error": "錯誤",
+    "warning": "警告",
+    "info": "提示",
+    "note": {
+      "created": "已創建新筆記",
+      "updated": "筆記已更新",
+      "deleted": "筆記已刪除",
+      "renamed": "筆記已重命名",
+      "colorChanged": "顏色已更改",
+      "copied": "已複製到剪貼板",
+      "cut": "已剪下到剪貼板",
+      "pasted": "已貼上內容",
+      "starred": "筆記已加入收藏",
+      "unstarred": "筆記已取消收藏"
+    }
+  }, 
+  "zoom": {
+    "reduce": "縮小",
+    "enlarge": "放大",
+    "reset": "重置"
+  },
+  "translate": {
+    "auto": "自動檢測",
+    "english": "英文",
+    "chineset": "繁體中文",
+    "translate": "翻譯",
+    "enterText": "請輸入要翻譯的文字...",
+    "error": "翻譯失敗，請稍後再試",
+    "chineses": "簡體中文",
+    "japanese": "日文",
+    "korean": "韓文",
+    "french": "法文",
+    "german": "德文",
+    "spanish": "西班牙文",
+    "italian": "義大利文",
+    "portuguese": "葡萄牙文",
+    "russian": "俄文",
+    "arabic": "阿拉伯文",
+    "turkish": "土耳其文",
+    "dutch": "荷蘭文",
+    "hindi": "印地文",
+    "polish": "波蘭文",
+    "romanian": "羅馬尼亞文",
+    "hungarian": "匈牙利文",
+    "czech": "捷克文",
+    "swedish": "瑞典文",
+    "norwegian": "挪威文",
+    "danish": "丹麥文",
+    "finnish": "芬蘭文",
+    "greek": "希臘文",
+    "bulgarian": "保加利亞文",
+    "croatian": "克羅埃西亞文",
+    "lithuanian": "立陶宛文",
+    "latvian": "拉脫維亞文",
+    "macedonian": "馬其頓文",
+    "malay": "馬來文",
+    "maltese": "馬爾他文"
+  }
+} 

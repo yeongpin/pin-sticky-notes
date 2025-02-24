@@ -1,0 +1,109 @@
+{
+  "app": {
+    "appName": "Sticky Notes",
+    "appVersion": "1.0.0"
+  },
+  "titleBar": {
+    "title": "Sticky Notes",
+    "pin": "Pin to Top",
+    "minimize": "Minimize",
+    "close": "Close",
+    "settings": "Settings",
+    "noteList": "Note List",
+    "translate": "Translate"
+  },
+  "confirm": {
+    "close": {
+      "title": "Confirm Action",
+      "message": "Do you want to close or minimize to tray?",
+      "minimize": "Minimize to Tray",
+      "exit": "Exit"
+    }
+  },
+  "note": {
+    "placeholder": "Write your note here...",
+    "untitled": "Untitled Note"
+  },
+  "tray": {
+    "show": "Show",
+    "exit": "Exit"
+  },
+  "noteList": {
+    "title": "Note List",
+    "new": "New Note",
+    "deleteConfirm": "Are you sure you want to delete this note?",
+    "editTitle": "Edit Title"
+  },
+  "contextMenu": {
+    "moveUp": "Move Up",
+    "moveDown": "Move Down",
+    "star": "Star",
+    "unstar": "Unstar",
+    "rename": "Rename",
+    "color": "Change Color",
+    "delete": "Delete",
+    "copy": "Copy",
+    "cut": "Cut",
+    "paste": "Paste"
+  },
+  "notification": {
+    "success": "Success",
+    "error": "Error",
+    "warning": "Warning",
+    "info": "Info",
+    "note": {
+      "created": "New note created",
+      "updated": "Note updated",
+      "deleted": "Note deleted",
+      "renamed": "Note renamed",
+      "colorChanged": "Color changed",
+      "copied": "Copied to clipboard",
+      "cut": "Cut to clipboard",
+      "pasted": "Content pasted",
+      "starred": "Note starred",
+      "unstarred": "Note unstarred"
+    }
+  },
+  "zoom": {
+    "reduce": "Reduce",
+    "enlarge": "Enlarge",
+    "reset": "Reset"
+  },
+  "translate": {
+    "auto": "Auto Detect",
+    "english": "English",
+    "chineset": "Traditional Chinese",
+    "translate": "Translate",
+    "enterText": "Enter text to translate...",
+    "error": "Translation failed, please try again later",
+    "chineses": "Simplified Chinese",
+    "japanese": "Japanese",
+    "korean": "Korean",
+    "french": "French",
+    "german": "German",
+    "spanish": "Spanish",
+    "italian": "Italian",
+    "portuguese": "Portuguese",
+    "russian": "Russian",
+    "arabic": "Arabic",
+    "turkish": "Turkish",
+    "dutch": "Dutch",
+    "hindi": "Hindi",
+    "polish": "Polish",
+    "romanian": "Romanian",
+    "hungarian": "Hungarian",
+    "czech": "Czech",
+    "swedish": "Swedish",
+    "norwegian": "Norwegian",
+    "danish": "Danish",
+    "finnish": "Finnish",
+    "greek": "Greek",
+    "bulgarian": "Bulgarian",
+    "croatian": "Croatian",
+    "lithuanian": "Lithuanian",
+    "latvian": "Latvian",
+    "macedonian": "Macedonian",
+    "malay": "Malay",
+    "maltese": "Maltese"
+  }
+} 
