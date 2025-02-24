@@ -31,6 +31,8 @@
     </div>
     <NoteContextMenu
       ref="noteContextMenuRef"
+      :undo-stack="undoStack"
+      :redo-stack="redoStack"
       @action="handleNoteContextMenuAction"
     />
   </div>
@@ -47,6 +49,7 @@ import NoteContextMenu from './NoteContextMenu.vue';
 import { useNotification } from '../store/notificationStore';
 import { ElMessage } from 'element-plus';
 import ZoomControl from './ZoomControl.vue';
+const notification = useNotification();
 
 const { t } = useI18n();
 const noteContent = ref('');
@@ -63,6 +66,11 @@ const textareaRef = ref(null);
 // 添加縮放相關的狀態
 const zoom = ref(100);
 
+// 添加撤銷/重做堆疊
+const undoStack = ref([]);
+const redoStack = ref([]);
+const maxStackSize = 50; // 限制堆疊大小
+
 // 當前筆記
 const currentNote = computed(() => {
   return noteStore.notes.value.find(note => note.id === currentNoteId.value);
@@ -70,18 +78,53 @@ const currentNote = computed(() => {
 
 // 自動保存
 const autoSave = () => {
-  if (!currentNoteId.value) {
-    // 只在創建新筆記時設置標題
-    const newNote = noteStore.createNote({
-      title: noteContent.value.split('\n')[0] || t('note.untitled'),
-      content: noteContent.value
-    });
-    currentNoteId.value = newNote.id;
-  } else {
-    // 已存在的筆記只更新內容
-    noteStore.updateNote(currentNoteId.value, {
-      content: noteContent.value
-    });
+  // 只有當內容真的改變時才添加到撤銷堆疊
+  const lastState = undoStack.value[undoStack.value.length - 1];
+  if (noteContent.value !== lastState) {
+    // 保存當前狀態到撤銷堆疊
+    undoStack.value.push(noteContent.value);
+    if (undoStack.value.length > maxStackSize) {
+      undoStack.value.shift();
+    }
+    // 清空重做堆疊，因為有了新的改動
+    redoStack.value = [];
+
+    // 保存到 store
+    if (!currentNoteId.value) {
+      // 只在創建新筆記時設置標題
+      const newNote = noteStore.createNote({
+        title: noteContent.value.split('\n')[0] || t('note.untitled'),
+        content: noteContent.value
+      });
+      currentNoteId.value = newNote.id;
+    } else {
+      // 已存在的筆記只更新內容
+      noteStore.updateNote(currentNoteId.value, {
+        content: noteContent.value
+      });
+    }
+  }
+};
+
+// 處理撤銷
+const handleUndo = () => {
+  if (undoStack.value.length > 0) {
+    // 保存當前狀態到重做堆疊
+    redoStack.value.push(noteContent.value);
+    // 恢復上一個狀態
+    noteContent.value = undoStack.value.pop();
+    notification.success('notification.note.undone');
+  }
+};
+
+// 處理重做
+const handleRedo = () => {
+  if (redoStack.value.length > 0) {
+    // 保存當前狀態到撤銷堆疊
+    undoStack.value.push(noteContent.value);
+    // 恢復下一個狀態
+    noteContent.value = redoStack.value.pop();
+    notification.success('notification.note.redone');
   }
 };
 
@@ -138,6 +181,9 @@ const loadNote = (noteId) => {
   if (note) {
     currentNoteId.value = note.id;
     noteContent.value = note.content;
+    // 重置撤銷/重做堆疊
+    undoStack.value = [note.content];
+    redoStack.value = [];
     // 記錄最後打開的筆記
     noteStore.setLastOpenedNote(note.id);
   }
@@ -154,6 +200,9 @@ const createNewNote = () => {
   
   currentNoteId.value = newNote.id;
   noteContent.value = '';
+  // 重置撤銷/重做堆疊
+  undoStack.value = [''];
+  redoStack.value = [];
   noteStore.setLastOpenedNote(newNote.id);
   notification.success('notification.note.created');
 };
@@ -218,6 +267,12 @@ const handleNoteContextMenuAction = async (action) => {
         ElMessage.error(t('error.paste'));
       }
       break;
+    case 'undo':
+      handleUndo();
+      break;
+    case 'redo':
+      handleRedo();
+      break;
   }
 };
 
@@ -238,11 +293,36 @@ onMounted(() => {
   if (lastNote) {
     currentNoteId.value = lastNote.id;
     noteContent.value = lastNote.content;
+    // 初始化撤銷堆疊
+    undoStack.value = [lastNote.content];
   }
 
   // 監聽窗口可見性變化
   document.addEventListener('visibilitychange', () => {
     isVisible.value = !document.hidden;
+  });
+
+  // 添加鍵盤快捷鍵
+  document.addEventListener('keydown', (e) => {
+    // 確保焦點在文本區域
+    if (document.activeElement !== textareaRef.value) return;
+
+    if (e.ctrlKey || e.metaKey) {
+      switch (e.key.toLowerCase()) {
+        case 'z':
+          e.preventDefault();
+          if (e.shiftKey) {
+            handleRedo();
+          } else {
+            handleUndo();
+          }
+          break;
+        case 'y':
+          e.preventDefault();
+          handleRedo();
+          break;
+      }
+    }
   });
 });
 </script>

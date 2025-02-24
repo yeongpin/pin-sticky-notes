@@ -1,7 +1,7 @@
 {   
   "app": {
-        "appName": "便利貼",
-        "appVersion": "1.0.0"
+        "appName": "Pin 便利貼",
+        "appVersion": "1.0.1"
    },
   "titleBar": {
     "title": "便利貼",
@@ -44,7 +44,9 @@
     "delete": "刪除",
     "copy": "複製",
     "cut": "剪下",
-    "paste": "貼上"
+    "paste": "貼上",
+    "undo": "復原",
+    "redo": "重做"
   },
   "notification": {
     "success": "成功",
@@ -61,7 +63,9 @@
       "cut": "已剪下到剪貼板",
       "pasted": "已貼上內容",
       "starred": "筆記已加入收藏",
-      "unstarred": "筆記已取消收藏"
+      "unstarred": "筆記已取消收藏",
+      "undone": "已復原變更",
+      "redone": "已重做變更"
     }
   }, 
   "zoom": {

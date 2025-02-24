@@ -1,7 +1,7 @@
 {
   "app": {
-    "appName": "Sticky Notes",
-    "appVersion": "1.0.0"
+    "appName": "Pin Sticky Notes",
+    "appVersion": "1.0.1"
   },
   "titleBar": {
     "title": "Sticky Notes",
@@ -44,7 +44,9 @@
     "delete": "Delete",
     "copy": "Copy",
     "cut": "Cut",
-    "paste": "Paste"
+    "paste": "Paste",
+    "undo": "Undo",
+    "redo": "Redo"
   },
   "notification": {
     "success": "Success",
@@ -61,7 +63,9 @@
       "cut": "Cut to clipboard",
       "pasted": "Content pasted",
       "starred": "Note starred",
-      "unstarred": "Note unstarred"
+      "unstarred": "Note unstarred",
+      "undone": "Changes undone",
+      "redone": "Changes redone"
     }
   },
   "zoom": {
