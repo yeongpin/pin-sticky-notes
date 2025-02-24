@@ -59,12 +59,22 @@ jobs:
         if: runner.os == 'macOS'
         run: |
           echo "Importing macOS certificate..."
+          
+          # 解码 p12 证书
           echo "${{ secrets.MAC_CERTIFICATE }}" | base64 --decode > certificate.p12
+          
+          # 创建 & 配置 keychain
           security create-keychain -p "" build.keychain
           security default-keychain -s build.keychain
           security unlock-keychain -p "" build.keychain
           security import certificate.p12 -k build.keychain -P "${{ secrets.MAC_CERTIFICATE_PASSWORD }}" -T /usr/bin/codesign
-          security list-keychains -d user -s build.keychain
+          
+          # 确保 keychain 设置正确
+          security set-key-partition-list -S apple-tool:,apple: -k "" build.keychain
+          
+          # 显示所有 keychains，确保 build.keychain 在列表里
+          security list-keychains -d user
+          security find-identity -v -p codesigning
         shell: bash
           
       - name: Get version from tag

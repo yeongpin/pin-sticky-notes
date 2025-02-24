@@ -14,7 +14,7 @@
     },
     "build": {
         "appId": "com.stickynotes.app",
-        "productName": "Sticky Notes",
+        "productName": "Pin Sticky Notes",
         "directories": {
             "output": "dist"
         },
@@ -67,7 +67,8 @@
             "allowToChangeInstallationDirectory": true,
             "createDesktopShortcut": true,
             "createStartMenuShortcut": true
-        }
+        },
+        "afterSign": "build/notarize.js"
     },
     "dependencies": {
         "@element-plus/icons-vue": "^2.3.1",
@@ -86,6 +87,7 @@
         "electron": "^25.0.0",
         "electron-builder": "^24.3.0",
         "vite": "^4.5.0",
-        "wait-on": "^7.2.0"
+        "wait-on": "^7.2.0",
+        "@electron/notarize": "^2.1.0"
     }
 }
