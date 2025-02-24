@@ -34,7 +34,7 @@
 </p>
 
 
-<img src="./images/preview.png" alt="Pin Sticky Notes Preview" width="800"/>
+<img src="./images/note_2025-02-24_17-08-55.png" alt="Pin Sticky Notes Preview" width="800"/>
 
 </div>
 
