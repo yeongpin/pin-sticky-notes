@@ -4,6 +4,14 @@ import { nanoid } from 'nanoid';
 const notes = ref([]);
 const lastOpenedNoteId = ref(null);
 
+// 保存到本地存儲的函數
+const saveToStorage = () => {
+  localStorage.setItem('notes', JSON.stringify(notes.value));
+  if (lastOpenedNoteId.value) {
+    localStorage.setItem('lastOpenedNoteId', lastOpenedNoteId.value);
+  }
+};
+
 // 按星標和時間排序
 const sortedNotes = computed(() => {
   // 先將筆記分為星標和非星標兩組
@@ -27,18 +35,20 @@ const noteStore = {
   lastOpenedNoteId,
   
   // 方法
-  createNote({ title, content = '', color = '#fff7b1' }) {
+  createNote: ({ title, content = '', color = '#fff7b1', path = null, lastModified = null }) => {
     const note = {
       id: nanoid(),
       title,
       content,
       color,
+      path,
       createTime: Date.now(),
-      lastModified: Date.now(),
+      lastModified: lastModified?.getTime() || Date.now(),
       starred: false
     };
+    
     notes.value = [...notes.value, note];
-    this.saveToStorage();
+    saveToStorage();
     return note;
   },
 
@@ -55,13 +65,13 @@ const noteStore = {
         updatedNote,
         ...notes.value.slice(index + 1)
       ];
-      this.saveToStorage();
+      saveToStorage();
     }
   },
 
   deleteNote(id) {
     notes.value = notes.value.filter(note => note.id !== id);
-    this.saveToStorage();
+    saveToStorage();
     this.sortedNotes.value = [...this.sortedNotes.value];
   },
 
@@ -99,7 +109,7 @@ const noteStore = {
     });
 
     notes.value = updatedNotes;
-    this.saveToStorage();
+    saveToStorage();
   },
 
   // 計算 zOrder
@@ -116,7 +126,7 @@ const noteStore = {
     if (note) {
       note.starred = !note.starred;
       note.lastModified = Date.now();
-      this.saveToStorage();
+      saveToStorage();
     }
   },
 
@@ -134,14 +144,6 @@ const noteStore = {
     }
     // 如果找不到最後打開的筆記，返回最新的筆記
     return this.sortedNotes.value[0];
-  },
-
-  // 修改存儲相關方法
-  saveToStorage() {
-    localStorage.setItem('notes', JSON.stringify(notes.value));
-    if (lastOpenedNoteId.value) {
-      localStorage.setItem('lastOpenedNoteId', lastOpenedNoteId.value);
-    }
   },
 
   loadFromStorage() {

@@ -49,6 +49,7 @@ import NoteContextMenu from './NoteContextMenu.vue';
 import { useNotification } from '../store/notificationStore';
 import { ElMessage } from 'element-plus';
 import ZoomControl from './ZoomControl.vue';
+
 const notification = useNotification();
 
 const { t } = useI18n();
@@ -283,6 +284,47 @@ const handleZoom = (event) => {
   zoom.value = newZoom;
 };
 
+// 處理保存
+const handleSave = async () => {
+  try {
+    if (currentNote.value?.path) {
+      // 如果已有路徑，直接保存
+      const result = await window.electron.saveFile({
+        path: currentNote.value.path,
+        content: noteContent.value
+      });
+      
+      if (result.success) {
+        noteStore.updateNote(currentNoteId.value, {
+          content: noteContent.value,
+          lastModified: result.lastModified
+        });
+        notification.success('notification.note.saved');
+      }
+    } else {
+      // 如果沒有路徑，打開保存對話框
+      const result = await window.electron.saveFileAs({
+        title: t('note.saveAs'),
+        buttonLabel: t('note.save'),
+        defaultPath: currentNote.value?.title || t('note.untitled'),
+        content: noteContent.value
+      });
+
+      if (result.success) {
+        noteStore.updateNote(currentNoteId.value, {
+          path: result.path,
+          content: noteContent.value,
+          lastModified: result.lastModified
+        });
+        notification.success('notification.note.saved');
+      }
+    }
+  } catch (error) {
+    console.error('Save error:', error);
+    notification.error('error.save');
+  }
+};
+
 // 初始化
 onMounted(() => {
   // 從本地存儲加載筆記
@@ -309,6 +351,10 @@ onMounted(() => {
 
     if (e.ctrlKey || e.metaKey) {
       switch (e.key.toLowerCase()) {
+        case 's':
+          e.preventDefault();
+          handleSave();
+          break;
         case 'z':
           e.preventDefault();
           if (e.shiftKey) {

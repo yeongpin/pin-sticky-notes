@@ -1,7 +1,7 @@
 {
   "app": {
     "appName": "Pin Sticky Notes",
-    "appVersion": "1.0.1"
+    "appVersion": "1.0.2"
   },
   "titleBar": {
     "title": "Sticky Notes",
@@ -10,7 +10,9 @@
     "close": "Close",
     "settings": "Settings",
     "noteList": "Note List",
-    "translate": "Translate"
+    "translate": "Translate",
+    "importFile": "Import File",
+    "importFolder": "Import Folder"
   },
   "confirm": {
     "close": {
@@ -22,7 +24,9 @@
   },
   "note": {
     "placeholder": "Write your note here...",
-    "untitled": "Untitled Note"
+    "untitled": "Untitled Note",
+    "saveAs": "Save As",
+    "save": "Save"
   },
   "tray": {
     "show": "Show",
@@ -65,7 +69,9 @@
       "starred": "Note starred",
       "unstarred": "Note unstarred",
       "undone": "Changes undone",
-      "redone": "Changes redone"
+      "redone": "Changes redone",
+      "imported": "Files imported successfully",
+      "saved": "File saved successfully"
     }
   },
   "zoom": {

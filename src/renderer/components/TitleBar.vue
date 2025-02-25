@@ -7,6 +7,29 @@
     </div>
     <div class="title-bar-right">
       <div class="window-controls">
+        <div class="right-buttons">
+        <el-dropdown trigger="click" :teleported="true" popper-class="toolbar-dropdown">
+          <div class="button">
+            <el-icon><FolderAdd /></el-icon>
+          </div>
+          <template #dropdown>
+            <el-dropdown-menu>
+              <el-dropdown-item @click="handleImportFile">
+                <div class="dropdown-item-content">
+                  <el-icon><Document /></el-icon>
+                  <span>{{ t('titleBar.importFile') }}</span>
+                </div>
+              </el-dropdown-item>
+              <el-dropdown-item @click="handleImportFolder">
+                <div class="dropdown-item-content">
+                  <el-icon><Folder /></el-icon>
+                  <span>{{ t('titleBar.importFolder') }}</span>
+                </div>
+              </el-dropdown-item>
+            </el-dropdown-menu>
+          </template>
+        </el-dropdown>
+      </div>
         <el-tooltip
           :content="t('titleBar.noteList')"
           placement="bottom"
@@ -100,12 +123,17 @@ import {
   Minus, 
   Close,
   Setting,
-  Document
+  Document,
+  FolderAdd,
+  Folder
 } from '@element-plus/icons-vue';
 import CloseConfirm from './CloseConfirm.vue';
 import TranslatePanel from './TranslatePanel.vue';
+import noteStore from '../store/noteStore';
+import { useNotification } from '../store/notificationStore';
 
 const { t, locale } = useI18n();
+const notification = useNotification();
 const currentLang = ref(localStorage.getItem('language') || 'zh-TW');
 const isPinned = ref(true);
 const closeConfirmRef = ref(null);
@@ -178,6 +206,54 @@ const onExit = () => {
 
 const toggleTranslate = () => {
   showTranslate.value = !showTranslate.value;
+};
+
+const handleImportFile = async () => {
+  try {
+    const result = await window.electron.openFileDialog({
+      properties: ['openFile', 'multiSelections'],
+      filters: [
+        { name: 'Text Files', extensions: ['txt', 'md'] },
+        { name: 'All Files', extensions: ['*'] }
+      ]
+    });
+
+    if (!result.canceled && result.files.length > 0) {
+      for (const file of result.files) {
+        noteStore.createNote({
+          title: file.name.substring(0, file.name.lastIndexOf('.')) || file.name,
+          content: file.content,
+          path: file.path,
+          lastModified: file.lastModified
+        });
+      }
+      notification.success('notification.note.imported');
+    }
+  } catch (error) {
+    console.error('Import error:', error);
+    notification.error('error.import');
+  }
+};
+
+const handleImportFolder = async () => {
+  try {
+    const result = await window.electron.openFolderDialog();
+    
+    if (!result.canceled && result.files.length > 0) {
+      for (const file of result.files) {
+        noteStore.createNote({
+          title: file.name.substring(0, file.name.lastIndexOf('.')) || file.name,
+          content: file.content,
+          path: file.path,
+          lastModified: file.lastModified
+        });
+      }
+      notification.success('notification.note.imported');
+    }
+  } catch (error) {
+    console.error('Import folder error:', error);
+    notification.error('error.import');
+  }
 };
 </script>
 
@@ -291,5 +367,21 @@ const toggleTranslate = () => {
   min-height: 24px !important;
   line-height: 16px !important;
   font-size: 12px !important;
+}
+
+.right-buttons {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.dropdown-item-content {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.toolbar-dropdown {
+  min-width: 160px;
 }
 </style> 

@@ -1,7 +1,7 @@
 {   
   "app": {
         "appName": "Pin 便利貼",
-        "appVersion": "1.0.1"
+        "appVersion": "1.0.2"
    },
   "titleBar": {
     "title": "便利貼",
@@ -10,7 +10,9 @@
     "close": "關閉",
     "settings": "設定",
     "noteList": "筆記列表",
-    "translate": "翻譯"
+    "translate": "翻譯",
+    "importFile": "導入文件",
+    "importFolder": "導入文件夾"
   },
   "confirm": {
     "close": {
@@ -22,7 +24,9 @@
   },
   "note": {
     "placeholder": "在這裡寫下你的筆記...",
-    "untitled": "未命名筆記"
+    "untitled": "未命名筆記",
+    "saveAs": "另存為",
+    "save": "保存"
   },
   "tray": {
     "show": "顯示",
@@ -65,7 +69,9 @@
       "starred": "筆記已加入收藏",
       "unstarred": "筆記已取消收藏",
       "undone": "已復原變更",
-      "redone": "已重做變更"
+      "redone": "已重做變更",
+      "imported": "文件導入成功",
+      "saved": "文件保存成功"
     }
   }, 
   "zoom": {
@@ -109,5 +115,9 @@
     "macedonian": "馬其頓文",
     "malay": "馬來文",
     "maltese": "馬爾他文"
+  },
+  "error": {
+    "import": "導入文件失敗",
+    "save": "保存文件失敗"
   }
 } 

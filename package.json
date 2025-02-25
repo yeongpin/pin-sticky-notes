@@ -1,6 +1,6 @@
 {
     "name": "pin-sticky-notes",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "description": "A simple sticky notes application",
     "main": "src/main/index.js",
     "author": "yeongpin",
