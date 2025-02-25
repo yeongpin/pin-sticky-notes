@@ -1,7 +1,7 @@
 {
   "app": {
     "appName": "Pin Sticky Notes",
-    "appVersion": "1.0.2"
+    "appVersion": "1.0.3"
   },
   "titleBar": {
     "title": "Sticky Notes",

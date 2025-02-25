@@ -39,7 +39,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, watch, nextTick } from 'vue';
+import { ref, computed, onMounted, watch, nextTick, onUnmounted } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { nanoid } from 'nanoid';
 import TitleBar from './TitleBar.vue';
@@ -325,6 +325,14 @@ const handleSave = async () => {
   }
 };
 
+// 處理 Tab 鍵切換
+const handleKeyDown = (e) => {
+  if (e.key === 'Tab') {
+    e.preventDefault(); // 阻止默認的 Tab 行為
+    showNoteList.value = !showNoteList.value;
+  }
+};
+
 // 初始化
 onMounted(() => {
   // 從本地存儲加載筆記
@@ -370,6 +378,14 @@ onMounted(() => {
       }
     }
   });
+
+  // 在組件掛載時添加事件監聽
+  document.addEventListener('keydown', handleKeyDown);
+});
+
+// 在組件卸載時移除事件監聽
+onUnmounted(() => {
+  document.removeEventListener('keydown', handleKeyDown);
 });
 </script>
 

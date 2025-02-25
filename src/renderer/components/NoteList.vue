@@ -238,7 +238,14 @@ const handleDelete = (noteId) => {
   background: var(--el-bg-color-page);
   display: flex;
   flex-direction: column;
-  user-select: none; /* 防止文字被選中 */
+  user-select: none;
+  transition: transform 0.3s ease;
+  transform: translateX(0);
+}
+
+/* 當列表隱藏時的樣式 */
+.note-list[v-show="false"] {
+  transform: translateX(-100%);
 }
 
 .note-list-header {

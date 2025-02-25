@@ -1,7 +1,7 @@
 {   
   "app": {
         "appName": "Pin 便利貼",
-        "appVersion": "1.0.2"
+        "appVersion": "1.0.3"
    },
   "titleBar": {
     "title": "便利貼",

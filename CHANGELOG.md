@@ -1,5 +1,9 @@
 
 ## 2025-02-25
+### v1.0.3
+- Add tab key to toggle note list
+- Add save note function
+
 ### v1.0.2
 - Add import file and folder function
 - Add export file function
